@@ -80,7 +80,7 @@ module_param(interactive_boost_ms, uint, 0644);
 #define MIN_INPUT_INTERVAL (100 * USEC_PER_MSEC)
 static u64 last_interactive_time;
 #else
-#define MIN_INPUT_INTERVAL (150 * USEC_PER_MSEC)
+#define MIN_INPUT_INTERVAL (100 * USEC_PER_MSEC)
 #endif
 
 static int set_input_boost_freq(const char *buf, const struct kernel_param *kp)
