@@ -39,6 +39,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
 
 lib-$(CONFIG_WATCHDOG) += nmi_backgrace.o
 
+CFLAGS_kobject_uevent.o += -Wframe-larger-than=3072
 lib-$(CONFIG_MMU) += ioremap.o
 lib-$(CONFIG_SMP) += cpumask.o
 lib-$(CONFIG_DMA_NOOP_OPS) += dma-noop.o
