@@ -32,10 +32,10 @@ static int cpufreq_stats_update(struct cpufreq_stats *stats)
 	unsigned long long cur_time = get_jiffies_64();
 	unsigned long flags;
 
-	spin_lock_irqsave(&cpufreq_stats_lock, flags);
+	spin_lock(&cpufreq_stats_lock);
 	stats->time_in_state[stats->last_index] += cur_time - stats->last_time;
 	stats->last_time = cur_time;
-	spin_unlock_irqrestore(&cpufreq_stats_lock, flags);
+	spin_unlock(&cpufreq_stats_lock);
 	return 0;
 }
 

@@ -3967,9 +3967,6 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
 	int no_progress_loops;
 	unsigned int cpuset_mems_cookie;
 	int reserve_flags;
-#ifdef CONFIG_ONEPLUS_MEM_MONITOR
-	unsigned long oneplus_alloc_start = jiffies;
-#endif
 
 	/*
 	 * We also sanity check to catch abuse of atomic reserves being used by
@@ -4204,9 +4201,6 @@ fail:
 	warn_alloc(gfp_mask, ac->nodemask,
 			"page allocation failure: order:%u", order);
 got_pg:
-#ifdef CONFIG_ONEPLUS_MEM_MONITOR
-	memory_alloc_monitor(gfp_mask, order, jiffies_to_msecs(jiffies - oneplus_alloc_start));
-#endif
 	return page;
 }
 
