@@ -32,10 +32,10 @@ ramdisk_compression=lz4-l
 " > kernelzip/props
 	cp -rp ~/android/anykernel/* kernelzip/
 	cd kernelzip/
-	7z a -mx9 Mawrol-kernel-$VERSION-tmp.zip *
-	7z a -mx0 Mawrol-kernel-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz
-	zipalign -v 4 Mawrol-kernel-$VERSION-tmp.zip ../Mawrol-kernel-$VERSION.zip
-	rm Mawrol-kernel-$VERSION-tmp.zip
+	7z a -mx9 Mawrol-$VERSION-tmp.zip *
+	7z a -mx0 Mawrol-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz
+	zipalign -v 4 Mawrol-$VERSION-tmp.zip ../Mawrol-$VERSION.zip
+	rm Mawrol-$VERSION-tmp.zip
 	cd ..
-	ls -al Mawrol-kernel-$VERSION.zip
+	ls -al Mawrol-$VERSION.zip
 fi
