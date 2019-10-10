@@ -10,6 +10,7 @@
 #include <linux/input.h>
 #include <linux/kthread.h>
 #include <uapi/linux/sched/types.h>
+#include <linux/moduleparam.h>
 
 enum {
 	SCREEN_OFF,
@@ -49,11 +50,10 @@ static void devfreq_max_unboost(struct work_struct *work);
 
 static unsigned int input_boost_ms __read_mostly = 64;
 static unsigned int wake_boost_ms __read_mostly = 0;
-static unsigned int cpubw_boost_freq __read_mostly = 0;
+const unsigned int cpubw_boost_freq = 0;
 
 module_param(input_boost_ms, uint, 0644);
 module_param(wake_boost_ms, uint, 0644);
-module_param(cpubw_boost_freq, uint, 0644);
 
 static struct df_boost_drv df_boost_drv_g __read_mostly = {
 	BOOST_DEV_INIT(df_boost_drv_g, DEVFREQ_MSM_CPUBW,
