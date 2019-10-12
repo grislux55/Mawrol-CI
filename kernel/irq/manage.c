@@ -30,6 +30,7 @@ struct irq_desc_list {
 	.list = LIST_HEAD_INIT(perf_crit_irqs.list)
 };
 static DEFINE_RAW_SPINLOCK(perf_irqs_lock);
+static int perf_cpu_index = -1;
 
 #ifdef CONFIG_IRQ_FORCED_THREADING
 __read_mostly bool force_irqthreads;
@@ -1553,8 +1554,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		/* Set default affinity mask once everything is setup */
 		if (new->flags & IRQF_PERF_CRITICAL)
 			setup_perf_irq_locked(desc);
-		else
-			setup_affinity(desc, mask);
 
 		if (irq_settings_can_autoenable(desc)) {
 			irq_startup(desc, IRQ_RESEND, IRQ_START_COND);
