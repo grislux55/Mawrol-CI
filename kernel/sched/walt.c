@@ -110,10 +110,10 @@ static void release_rq_locks_irqrestore(const cpumask_t *cpus,
  * Tick interval becomes to 3333333 due to
  * rounding error when HZ=300.
  */
-#define MIN_SCHED_RAVG_WINDOW (3333333 * 6)
+#define MIN_SCHED_RAVG_WINDOW (3333333 * CONFIG_MIN_WALT_WIN_TICKS)
 #else
 /* Min window size (in ns) = 20ms */
-#define MIN_SCHED_RAVG_WINDOW 20000000
+#define MIN_SCHED_RAVG_WINDOW (10000000 * CONFIG_MIN_WALT_WIN_TICKS)
 #endif
 
 /* Max window size (in ns) = 1s */
