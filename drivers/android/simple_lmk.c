@@ -298,15 +298,15 @@ static int simple_lmk_init_set(const char *val, const struct kernel_param *kp)
 	
 	si_meminfo(&i);
 	pr_info("Totalram=%d",i.totalram);
-	if (i.totalram < 1900000) {
-		lmk_aggression = 1;
-		pr_info("Detected <8GB memory: lmk aggression 1");
-	} else if (i.totalram > 2000000) {
+	if (i.totalram > 2000000) {
 		lmk_aggression = 3;
 		pr_info("Detected 12GB memory: lmk aggression 3");
-	} else {
+	} else if (i.totalram > 1500000) {
 		lmk_aggression = 2;
 		pr_info("Detected 8GB memory: lmk aggression 2");
+	} else { 
+		lmk_aggression = 1;
+		pr_info("Detected 6GB memory: lmk aggression 1");
 	}
 
 	if (!atomic_cmpxchg(&init_done, 0, 1)) {
