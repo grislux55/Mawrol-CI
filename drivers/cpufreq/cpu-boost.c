@@ -36,8 +36,12 @@ static struct work_struct input_boost_work;
 
 static bool input_boost_enabled;
 
+#ifdef CONFIG_INTERACTIVE_BOOST
+static unsigned int input_boost_ms = 150;
+#else
 static unsigned int input_boost_ms = 40;
 module_param(input_boost_ms, uint, 0644);
+#endif
 
 static unsigned int sched_boost_on_input;
 module_param(sched_boost_on_input, uint, 0644);
@@ -56,7 +60,20 @@ static struct delayed_work dynamic_stune_boost_rem;
 
 static struct delayed_work input_boost_rem;
 static u64 last_input_time;
+
+#ifdef CONFIG_INTERACTIVE_BOOST
+static struct workqueue_struct *interactive_boost_wq;
+static struct work_struct interactive_boost_work;
+static struct delayed_work interactive_boost_rem;
+static bool interactive_boost_enabled = false;
+static unsigned int interactive_boost_ms = 2000;
+module_param(interactive_boost_ms, uint, 0644);
+#define MIN_INTERACTIVE_INTERVAL (150 * USEC_PER_MSEC)
+#define MIN_INPUT_INTERVAL (100 * USEC_PER_MSEC)
+static u64 last_interactive_time;
+#else
 #define MIN_INPUT_INTERVAL (150 * USEC_PER_MSEC)
+#endif
 
 static int set_input_boost_freq(const char *buf, const struct kernel_param *kp)
 {
@@ -262,6 +279,55 @@ static void do_input_boost(struct work_struct *work)
 					msecs_to_jiffies(input_boost_ms));
 }
 
+#ifdef CONFIG_INTERACTIVE_BOOST
+static void do_interactive_boost_rem(struct work_struct *work)
+{
+	interactive_boost_enabled = false;
+}
+
+static void do_interactive_boost(struct work_struct *work)
+{
+	cancel_delayed_work_sync(&interactive_boost_rem);
+
+	interactive_boost_enabled = true;
+	interactive_boost_tick();
+
+	queue_delayed_work(interactive_boost_wq, &interactive_boost_rem,
+					msecs_to_jiffies(interactive_boost_ms));
+}
+
+static void cpuboost_input_event(struct input_handle *handle,
+		unsigned int type, unsigned int code, int value)
+{
+	u64 now = ktime_to_us(ktime_get());
+	if (now - last_interactive_time < MIN_INTERACTIVE_INTERVAL)
+		return;
+
+	if (work_pending(&interactive_boost_work))
+		return;
+
+	queue_work(interactive_boost_wq, &interactive_boost_work);
+	last_interactive_time = ktime_to_us(ktime_get());
+}
+
+void interactive_boost_tick(void)
+{
+	u64 now;
+
+	if (!interactive_boost_enabled || !input_boost_enabled)
+		return;
+
+	now = ktime_to_us(ktime_get());
+	if (now - last_input_time < MIN_INPUT_INTERVAL)
+		return;
+
+	if (work_pending(&input_boost_work))
+		return;
+
+	queue_work(cpu_boost_wq, &input_boost_work);
+	last_input_time = ktime_to_us(ktime_get());
+}
+#else
 static void cpuboost_input_event(struct input_handle *handle,
 		unsigned int type, unsigned int code, int value)
 {
@@ -280,6 +346,7 @@ static void cpuboost_input_event(struct input_handle *handle,
 	queue_work(cpu_boost_wq, &input_boost_work);
 	last_input_time = ktime_to_us(ktime_get());
 }
+#endif
 
 static int cpuboost_input_connect(struct input_handler *handler,
 		struct input_dev *dev, const struct input_device_id *id)
@@ -371,6 +438,15 @@ static int cpu_boost_init(void)
 #ifdef CONFIG_DYNAMIC_STUNE_BOOST
 	INIT_DELAYED_WORK(&dynamic_stune_boost_rem, do_dynamic_stune_boost_rem);
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
+
+#ifdef CONFIG_INTERACTIVE_BOOST
+	interactive_boost_wq = alloc_workqueue("interactiveboost_wq", WQ_HIGHPRI, 0);
+	if (!interactive_boost_wq)
+		return -EFAULT;
+
+	INIT_WORK(&interactive_boost_work, do_interactive_boost);
+	INIT_DELAYED_WORK(&interactive_boost_rem, do_interactive_boost_rem);
+#endif
 
 	for_each_possible_cpu(cpu) {
 		s = &per_cpu(sync_info, cpu);

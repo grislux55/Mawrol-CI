@@ -31,6 +31,7 @@
 #include <drm/drm_mode.h>
 #include <drm/drm_print.h>
 #include <linux/sync_file.h>
+#include <linux/cpufreq.h>
 
 #include "drm_crtc_internal.h"
 
@@ -2248,6 +2249,11 @@ int drm_mode_atomic_ioctl(struct drm_device *dev,
 		return -EINVAL;
 
 	drm_modeset_acquire_init(&ctx, 0);
+	
+#ifdef CONFIG_INTERACTIVE_BOOST
+	if (!(arg->flags & DRM_MODE_ATOMIC_TEST_ONLY))
+		interactive_boost_tick();
+#endif
 
 	state = drm_atomic_state_alloc(dev);
 	if (!state)

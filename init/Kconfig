@@ -1126,6 +1126,15 @@ config DEFAULT_USE_ENERGY_AWARE
 
 	  Say N if unsure.
 
+config INTERACTIVE_BOOST
+	bool "Interactive boost support"
+	default n
+	help
+	  This option enables cpu input boost to tick when a frame is ready to 
+	  rendered to the display. 
+
+	  Say N if unsure.
+
 config SYSFS_DEPRECATED
 	bool "Enable deprecated sysfs features to support old userspace tools"
 	depends on SYSFS
