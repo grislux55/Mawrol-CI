@@ -7408,7 +7408,6 @@ static inline bool task_fits_max(struct task_struct *p, int cpu)
 	if (task_boost_policy(p) == SCHED_BOOST_ON_BIG &&
 			is_min_capacity_cpu(cpu))
 		return false;
->>>>>>> 428302b0f5b8... sched/fair: refine some scheduler changes from AU drop
 
 	return task_fits_capacity(p, capacity, cpu);
 }
