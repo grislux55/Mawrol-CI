@@ -30,10 +30,9 @@ block=/dev/block/bootdevice/by-name/boot
 is_slot_device=1
 ramdisk_compression=lz4-l
 " > kernelzip/props
-	cp -rp ~/android/anykernel/* kernelzip/
+	cp -rp ~/android/ak2/* kernelzip/
 	cd kernelzip/
-	7z a -mx9 Mawrol-$VERSION-tmp.zip *
-	7z a -mx0 Mawrol-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz
+	7z a -mx0 Mawrol-$VERSION-tmp.zip *
 	zipalign -v 4 Mawrol-$VERSION-tmp.zip ../Mawrol-$VERSION.zip
 	rm Mawrol-$VERSION-tmp.zip
 	cd ..
