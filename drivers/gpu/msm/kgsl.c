@@ -4942,8 +4942,7 @@ int kgsl_device_platform_probe(struct kgsl_device *device)
 	}
 
 	status = devm_request_irq(device->dev, device->pwrctrl.interrupt_num,
-				  kgsl_irq_handler,
-				  IRQF_TRIGGER_HIGH,
+				  kgsl_irq_handler, IRQF_TRIGGER_HIGH,
 				  device->name, device);
 	if (status) {
 		KGSL_DRV_ERR(device, "request_irq(%d) failed: %d\n",
