@@ -59,6 +59,8 @@ static bool stune_boost_active;
 static int boost_slot;
 static unsigned int dynamic_stune_boost_ms = 40;
 module_param(dynamic_stune_boost_ms, uint, 0644);
+static struct kthread_work dynamic_stune_boost_work;
+static struct task_struct *dynamic_stune_boost_worker_thread;
 static struct delayed_work dynamic_stune_boost_rem;
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
 
@@ -279,8 +281,7 @@ static void do_input_boost(struct kthread_work *work)
 	if (!ret)
 		stune_boost_active = true;
 
-	queue_delayed_work(cpu_boost_wq, &dynamic_stune_boost_rem,
-					msecs_to_jiffies(dynamic_stune_boost_ms));
+	schedule_delayed_work(&dynamic_stune_boost_rem, msecs_to_jiffies(dynamic_stune_boost_ms));
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
 
 	schedule_delayed_work(&input_boost_rem, msecs_to_jiffies(input_boost_ms));
