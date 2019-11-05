@@ -48,6 +48,7 @@
 #include <linux/oom.h>
 #include <linux/prefetch.h>
 #include <linux/printk.h>
+#include <linux/simple_lmk.h>
 #include <linux/dax.h>
 #include <linux/psi.h>
 
@@ -3422,6 +3423,8 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int classzone_idx)
 	do {
 		unsigned long nr_reclaimed = sc.nr_reclaimed;
 		bool raise_priority = true;
+		
+		simple_lmk_decide_reclaim(sc.priority);
 
 		sc.reclaim_idx = classzone_idx;
 
