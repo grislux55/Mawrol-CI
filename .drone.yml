@@ -1,0 +1,26 @@
+kind: pipeline
+type: docker
+name: Mawrol Kernel CI
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  depth: 1
+
+steps:
+  - name: kernel_build
+    image: ubuntu:19.10
+    environment:
+      GITID:
+        from_secret: GITID
+      GITPWD:
+        from_secret: GITPWD
+      GITNAME:
+        from_secret: GITNAME
+      GITEMAIL:
+        from_secret: GITEMAIL
+    commands:
+      - apt-get update && apt-get install -y cpio liblz4-dev zipalign p7zip fakeroot liblz4-tool liblz4-1 gcc make bc curl git zip zstd flex
+      - bash build_ci.sh
