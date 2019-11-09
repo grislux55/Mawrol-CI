@@ -137,3 +137,4 @@ kernel/configs/android-*.cfg
 !build_tools/**
 !aarch64-elf-gcc/**
 !arm-eabi-gcc/**
+!anykernel
