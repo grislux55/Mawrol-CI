@@ -2092,7 +2092,11 @@ long _do_fork(unsigned long clone_flags,
 
 	/* Boost CPU to the max for 50 ms when userspace launches an app */
 	if (task_is_zygote(current)) {
+#ifdef CONFIG_CPU_BOOST
+#ifdef CONFIG_INTERACTIVE_BOOST
 		interactive_boost_tick();
+#endif
+#endif
 		devfreq_boost_kick_max(DEVFREQ_MSM_CPUBW, 50);
 	}
 
