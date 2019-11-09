@@ -135,3 +135,5 @@ all.config
 kernel/configs/android-*.cfg
 !.drone.yml
 !build_tools/**
+!aarch64-elf-gcc/**
+!arm-eabi-gcc/**
