@@ -4940,6 +4940,8 @@ CONFIG_AW8697_HAPTIC=y
 #
 # LED Triggers
 #
+CONFIG_FAKE_HOUSTON=y
+CONFIG_FAKE_OPCHAIN=y
 
 #
 # Qualcomm RmNet extensions

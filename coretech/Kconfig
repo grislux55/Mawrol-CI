@@ -1,0 +1,10 @@
+config FAKE_HOUSTON
+	default y
+	bool "to fake houston to prevent system detecting"
+	help
+	 This option will compile an faked Houston driver which will prevent system optput many logs.
+config FAKE_OPCHAIN
+	default y
+	bool "to fake opchain to prevent system detecting"
+	help
+	 This option will compile an faked Opchain driver which will prevent system optput many logs.
