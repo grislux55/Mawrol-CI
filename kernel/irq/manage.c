@@ -1184,34 +1184,6 @@ static void affine_one_perf_irq(struct irq_desc *desc)
 	perf_cpu_index = cpu;
 }
 
-static void setup_perf_irq_locked(struct irq_desc *desc)
-{
-	add_desc_to_perf_list(desc);
-	irqd_set(&desc->irq_data, IRQD_AFFINITY_MANAGED);
-	raw_spin_lock(&perf_irqs_lock);
-	affine_one_perf_irq(desc);
-	raw_spin_unlock(&perf_irqs_lock);
-}
-
-void irq_set_perf_affinity(unsigned int irq)
-{
-	struct irq_desc *desc = irq_to_desc(irq);
-	struct irqaction *action;
-	unsigned long flags;
-
-	if (!desc)
-		return;
-
-	raw_spin_lock_irqsave(&desc->lock, flags);
-	action = desc->action;
-	while (action) {
-		action->flags |= IRQF_PERF_CRITICAL;
-		action = action->next;
-	}
-	setup_perf_irq_locked(desc);
-	raw_spin_unlock_irqrestore(&desc->lock, flags);
-}
-
 void unaffine_perf_irqs(void)
 {
 	struct irq_desc_list *data;
@@ -1509,8 +1481,12 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 			irqd_set(&desc->irq_data, IRQD_NO_BALANCING);
 		}
 
-		if (new->flags & IRQF_PERF_CRITICAL) 
-			setup_perf_irq_locked(desc);
+		if (new->flags & IRQF_PERF_CRITICAL) {
+			add_desc_to_perf_list(desc);
+			irqd_set(&desc->irq_data, IRQD_AFFINITY_MANAGED);
+			irq_set_affinity_locked(&desc->irq_data,
+				cpu_perf_mask, true);
+		}
 
 		if (irq_settings_can_autoenable(desc)) {
 			irq_startup(desc, IRQ_RESEND, IRQ_START_COND);
