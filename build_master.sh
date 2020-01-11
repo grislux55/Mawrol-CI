@@ -5,7 +5,7 @@ if [[ "${1}" != "skip" ]] ; then
 	./build_kernel.sh stock "$@" || exit 1
 fi
 
-VERSION="$(cat version)-$(date +'%y%m%d%H%M' | sed s@-@@g)"
+VERSION="$(cat version)"
 
 if [ -e boot.img ] ; then
 	rm Mawrol-$VERSION.zip 2>/dev/null
