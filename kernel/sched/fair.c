@@ -8465,7 +8465,8 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 	if (energy_aware()) {
 		rcu_read_lock();
 		new_cpu = find_energy_efficient_cpu(energy_sd, p,
-						cpu, prev_cpu, sync);
+						cpu, prev_cpu, sync,
+						sibling_count_hint);
 		rcu_read_unlock();
 		return new_cpu;
 	}
