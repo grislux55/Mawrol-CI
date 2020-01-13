@@ -133,3 +133,8 @@ all.config
 
 # fetched Android config fragments
 kernel/configs/android-*.cfg
+!.drone.yml
+!build_tools/**
+!aarch64-elf-gcc/**
+!arm-eabi-gcc/**
+!anykernel/**

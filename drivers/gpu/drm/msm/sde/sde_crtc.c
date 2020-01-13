@@ -698,6 +698,7 @@ static void _sde_crtc_deinit_events(struct sde_crtc *sde_crtc)
 		return;
 }
 
+#ifdef CONFIG_DEBUG_FS
 static int _sde_debugfs_fps_status_show(struct seq_file *s, void *data)
 {
 	struct sde_crtc *sde_crtc;
@@ -744,6 +745,7 @@ static int _sde_debugfs_fps_status(struct inode *inode, struct file *file)
 	return single_open(file, _sde_debugfs_fps_status_show,
 			inode->i_private);
 }
+#endif
 
 static ssize_t set_fps_periodicity(struct device *device,
 		struct device_attribute *attr, const char *buf, size_t count)
@@ -5818,7 +5820,7 @@ static int sde_crtc_onscreenfinger_atomic_check(struct sde_crtc_state *cstate,
 				display->panel->bl_config.bl_level < op_dimlayer_bl_alpha) {
 				dim_backlight = 1;
 				op_dimlayer_bl = 1;
-				if (mode_fps == 60 && dsi_panel_hw_type == DSI_PANEL_SAMSUNG_S6E3HC2)
+				if (mode_fps == 60 && dsi_panel_name == DSI_PANEL_SAMSUNG_S6E3HC2)
 					dim_backlight_pre = 1;
 			} else {
 				op_dimlayer_bl = 0;
@@ -5826,11 +5828,11 @@ static int sde_crtc_onscreenfinger_atomic_check(struct sde_crtc_state *cstate,
 		} else {
 			op_dimlayer_bl = 0;
 			if (dim_backlight_pre) {
-				if (mode_fps == 60 && dsi_panel_hw_type == DSI_PANEL_SAMSUNG_S6E3HC2)
+				if (mode_fps == 60 && dsi_panel_name == DSI_PANEL_SAMSUNG_S6E3HC2)
 					dim_backlight = 1;
 
 				dim_backlight_pre = 0;
-				SDE_ERROR("show dl one more frame %d\n", dsi_panel_hw_type);
+				SDE_ERROR("show dl one more frame %d\n", dsi_panel_name);
 			}
 		}
     }
@@ -5911,7 +5913,7 @@ static int sde_crtc_onscreenfinger_atomic_check(struct sde_crtc_state *cstate,
 			cstate->fingerprint_mode = false;
 
 		if ((fp_index >= 0 || dim_backlight > 0) && sde_crtc_config_fingerprint_dim_layer(&cstate->base, zpos)) {
-			SDE_ERROR("Failed to config dim layer\n");
+			SDE_DEBUG("Failed to config dim layer\n");
 			return -EINVAL;
 		}
 		if (fppressed_index >= 0)
@@ -7599,7 +7601,10 @@ struct drm_crtc *sde_crtc_init(struct drm_device *dev, struct drm_plane *plane)
 
 	sde_crtc_install_properties(crtc, kms->catalog);
 
-	if (dsi_panel_hw_type == DSI_PANEL_SAMSUNG_SOFEF03F_M) {
+	if (dsi_panel_name == DSI_PANEL_SAMSUNG_S6E3HC2 || dsi_panel_name == DSI_PANEL_SAMSUNG_S6E3FC2X01) {
+		for (i = 0; i < 21; i++)
+			brightness_alpha_lut[i] = brightness_alpha_lut_1[i];
+	} else if (dsi_panel_name == DSI_PANEL_SAMSUNG_SOFEF03F_M) {
 		for (i = 0; i < 21; i++)
 			brightness_alpha_lut[i] = brightness_alpha_lut_2[i];
 	} else {
