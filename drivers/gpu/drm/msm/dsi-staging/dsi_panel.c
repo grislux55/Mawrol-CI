@@ -989,7 +989,7 @@ static void set_hbm_mode(struct work_struct *work)
 	switch (level) {
 	case 0:
 		__dsi_panel_tx_cmd_set(panel, DSI_CMD_SET_HBM_OFF, false);
-		printk(KERN_ERR
+		printk(KERN_DEBUG
 		       "When HBM OFF -->hbm_backight = %d panel->bl_config.bl_level =%d\n",
 		       panel->hbm_backlight, panel->bl_config.bl_level);
 		dsi_panel_update_backlight(panel, panel->hbm_backlight);
