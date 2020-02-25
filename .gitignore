@@ -136,3 +136,6 @@ kernel/configs/android-*.cfg
 
 # Toolchain
 !toolchain/**
+
+# Drone CI
+!.drone.yml
