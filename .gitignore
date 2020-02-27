@@ -139,3 +139,6 @@ kernel/configs/android-*.cfg
 
 # Drone CI
 !.drone.yml
+
+# Execprog generator
+!generator
