@@ -10,6 +10,7 @@ if [[ "${1}" == "skip" ]] ; then
 	echo "Skipping Compilation"
 else
 	echo "Compiling kernel"
+	./generator ramdisk/init.qcom.post_boot.sh init/execprog.h
 	cp defconfig .config
 	make "$@" || exit 1
 fi
