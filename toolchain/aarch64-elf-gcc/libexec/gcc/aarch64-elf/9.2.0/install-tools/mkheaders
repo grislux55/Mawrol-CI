@@ -53,7 +53,7 @@ if [ x$1 != x ] ; then
   prefix=$1
   shift
 else
-  prefix=/home/dragon/tcbuild/gcc/aarch64-elf-9.2.0
+  prefix=/home/arter97/arm64-gcc
 fi
 
 # Allow for alternate isysroot in which to find headers

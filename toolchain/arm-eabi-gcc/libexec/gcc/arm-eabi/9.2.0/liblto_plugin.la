@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/dragon/tcbuild/gcc/arm-eabi-9.2.0/libexec/gcc/arm-eabi/9.2.0'
+libdir='/home/arter97/arm32-gcc/libexec/gcc/arm-eabi/9.2.0'

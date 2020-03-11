@@ -40,7 +40,7 @@
 
 /* Define 0/1 to force the choice for exception handling model. */
 #ifndef USED_FOR_TARGET
-/* #undef CONFIG_SJLJ_EXCEPTIONS */
+#define CONFIG_SJLJ_EXCEPTIONS 0
 #endif
 
 
@@ -660,7 +660,7 @@
 
 /* Define if your assembler and linker support thread-local storage. */
 #ifndef USED_FOR_TARGET
-#define HAVE_AS_TLS 1
+/* #undef HAVE_AS_TLS */
 #endif
 
 
@@ -1353,7 +1353,7 @@
 
 /* Define to 1 if using GNU as. */
 #ifndef USED_FOR_TARGET
-#define HAVE_GNU_AS 0
+#define HAVE_GNU_AS 1
 #endif
 
 
@@ -1365,7 +1365,7 @@
 
 /* Define to 1 if using GNU ld. */
 #ifndef USED_FOR_TARGET
-#define HAVE_GNU_LD 0
+#define HAVE_GNU_LD 1
 #endif
 
 
@@ -1391,7 +1391,7 @@
 /* Define 0/1 if .init_array/.fini_array sections are available and working.
    */
 #ifndef USED_FOR_TARGET
-#define HAVE_INITFINI_ARRAY_SUPPORT 0
+#define HAVE_INITFINI_ARRAY_SUPPORT 1
 #endif
 
 
@@ -1491,7 +1491,7 @@
 
 /* Define if your linker supports --demangle option. */
 #ifndef USED_FOR_TARGET
-/* #undef HAVE_LD_DEMANGLE */
+#define HAVE_LD_DEMANGLE 1
 #endif
 
 

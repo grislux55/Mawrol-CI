@@ -7,7 +7,7 @@ OUTPUT_FORMAT("elf64-littleaarch64", "elf64-bigaarch64",
 	      "elf64-littleaarch64")
 OUTPUT_ARCH(aarch64)
 ENTRY(_start)
-SEARCH_DIR("/home/dragon/tcbuild/gcc/aarch64-elf-9.2.0/aarch64-elf/lib");
+SEARCH_DIR("=/home/arter97/arm64-gcc/aarch64-elf/lib"); SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
@@ -39,9 +39,7 @@ SECTIONS
   .rela.plt       :
     {
       *(.rela.plt)
-      PROVIDE_HIDDEN (__rela_iplt_start = .);
       *(.rela.iplt)
-      PROVIDE_HIDDEN (__rela_iplt_end = .);
     }
   .init           :
   {

@@ -1,5 +1,5 @@
 /* Generated automatically by the program 'build/genpreds'
-   from the machine description file '/home/dragon/tcbuild/gcc/build/gcc-9.2.0/gcc/config/arm/arm.md'.  */
+   from the machine description file '../../gcc/gcc/config/arm/arm.md'.  */
 
 #ifndef GCC_TM_PREDS_H
 #define GCC_TM_PREDS_H
