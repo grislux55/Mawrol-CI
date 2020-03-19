@@ -49,5 +49,63 @@ mv $home/dtb $home/split_img/
 rm -rf $ramdisk/overlay;
 rm -rf $ramdisk/overlay.d;
 
+if [ -d $ramdisk/.backup ]; then
+  ui_print " " "Magisk detected! Injecting Magisk module...";
+  rm -rf /data/adb/modules/mawrol;
+  mkdir -p /data/adb/modules/mawrol;
+  cp -rfp $home/magisk/* /data/adb/modules/mawrol;
+  chmod 755 /data/adb/modules/mawrol/*;
+  chmod 644 /data/adb/modules/mawrol/module.prop;
+  if [ $os == "stock" ]; then
+    ui_print " " "Creating Oneplushit remover...";
+    REPLACE="
+/system/app/LogKitSdService
+/system/app/OEMLogKit
+/system/app/OPBugReportLite
+/system/app/OPCommonLogTool
+/system/app/OPIntelliService
+/system/app/OPTelephonyDiagnoseManager
+/system/priv-app/Houston
+/system/priv-app/OPAppCategoryProvider
+/system/priv-app/OPDeviceManager
+/system/priv-app/OPDeviceManagerProvider
+"
+    OPCACHE="
+system@app@LogKitSdService
+system@app@OEMLogKit
+system@app@OPBugReportLite
+system@app@OPCommonLogTool
+system@app@OPIntelliService
+system@app@OPTelephonyDiagnoseManager
+system@priv-app@Houston
+system@priv-app@OPAppCategoryProvider
+system@priv-app@OPDeviceManager
+system@priv-app@OPDeviceManagerProvider
+"
+    OPDATA="
+com.oem.logkitsdservice
+com.oem.oemlogkit
+com.oneplus.opbugreportlite
+net.oneplus.opcommonlogtool
+com.oneplus.asti
+com.oneplus.diagnosemanager
+com.oneplus.houston
+net.oneplus.provider.appcategoryprovider
+net.oneplus.odm.provider
+net.oneplus.odm
+"
+    for TARGET in $REPLACE; do
+      mkdir -p /data/adb/modules/mawrol/$TARGET;
+      touch /data/adb/modules/mawrol/$TARGET/.replace;
+    done
+    for TARGET in $OPCACHE; do
+      rm -f /data/dalvik-cache/arm64/$TARGET*;
+    done
+    for TARGET in $OPDATA; do
+      rm -rf /data/data/$TARGET;
+    done
+  fi
+fi
+
 write_boot;
 ## end install

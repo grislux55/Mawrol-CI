@@ -1,0 +1,6 @@
+id=mawrol
+name=Mawrol内核伴随模块
+version=Q
+versionCode=1
+author=grislux55
+description=设置Mawrol内核的参数并且精简掉一加的一些影响性能的服务组件。感谢Æsir, yc9559, a1623382, 毛茸茸和Erik。
