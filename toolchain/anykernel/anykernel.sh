@@ -39,16 +39,33 @@ ramdisk_compression=auto
 set_perm_recursive 0 0 755 644 $ramdisk/*;
 set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 
+# Detect device and system
+hotdog="$(grep -wom 1 hotdog*.* /system/build.prop | sed 's/.....$//')";
+guacamole="$(grep -wom 1 guacamole*.* /system/build.prop | sed 's/.....$//')";
+userflavor="$(file_getprop /system/build.prop "ro.build.user"):$(file_getprop /system/build.prop "ro.build.flavor")";
+userflavor2="$(file_getprop2 /system/build.prop "ro.build.user"):$(file_getprop2 /system/build.prop "ro.build.flavor")";
+if [ "$userflavor" == "jenkins:$hotdog-user" ] || [ "$userflavor2" == "jenkins:$guacamole-user" ]; then
+  os="stock";
+  os_string="OxygenOS/HydrogenOS";
+else
+  os="custom";
+  os_string="a custom ROM";
+fi
+ui_print " " "You are on $os_string!";
+
 ## AnyKernel install
 dump_boot;
 
 # Override DTB
+ui_print " " "Overriding DTB...";
 mv $home/dtb $home/split_img/
 
 # Clean up existing ramdisk overlays
+ui_print " " "Cleaning up existing ramdisk overlays...";
 rm -rf $ramdisk/overlay;
 rm -rf $ramdisk/overlay.d;
 
+# Inject Magisk module
 if [ -d $ramdisk/.backup ]; then
   ui_print " " "Magisk detected! Injecting Magisk module...";
   rm -rf /data/adb/modules/mawrol;
