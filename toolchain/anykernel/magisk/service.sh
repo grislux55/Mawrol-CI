@@ -73,34 +73,24 @@ if [ "$(cat /sys/module/lpm_levels/parameters/sleep_disabled)" == "Y" ]; then
   log "[INFO]: 已恢复关闭的CPUidle lpm_level"
 fi
 
-STUNE_TASK="
-system_server foreground cgroup.procs
-surfaceflinger foreground tasks
-android.io foreground tasks
-android.anim top-app tasks
-android.anim.lf top-app tasks
-android.bg background tasks
-android.fg foreground tasks
-android.ui top-app tasks
-android.display top-app tasks
-ndroid.systemui top-app tasks
-"
-CPUSET_TASK="
-system_server foreground cgroup.procs
-surfaceflinger system-background tasks
-android.io foreground tasks
-android.anim top-app tasks
-android.anim.lf top-app tasks
-android.bg system-background tasks
-android.fg foreground tasks
-android.ui foreground tasks
-android.display top-app tasks
-ndroid.systemui top-app tasks
-"
-for i in $STUNE_TASK; do
-    set_task $i stune
-done
-for i in $CPUSET_TASK; do
-    set_task $i cpuset
-done
+set_task system_server foreground cgroup.procs stune
+set_task surfaceflinger foreground tasks stune
+set_task android.io foreground tasks stune
+set_task android.anim top-app tasks stune
+set_task android.anim.lf top-app tasks stune
+set_task android.bg background tasks stune
+set_task android.fg foreground tasks stune
+set_task android.ui top-app tasks stune
+set_task android.display top-app tasks stune
+set_task ndroid.systemui top-app tasks stune
+set_task system_server foreground cgroup.procs cpuset
+set_task surfaceflinger system-background tasks cpuset
+set_task android.io foreground tasks cpuset
+set_task android.anim top-app tasks cpuset
+set_task android.anim.lf top-app tasks cpuset
+set_task android.bg system-background tasks cpuset
+set_task android.fg foreground tasks cpuset
+set_task android.ui foreground tasks cpuset
+set_task android.display top-app tasks cpuset
+set_task ndroid.systemui top-app tasks cpuset
 log "[INFO]: 已经设置了Pixel的cgroup设定"
