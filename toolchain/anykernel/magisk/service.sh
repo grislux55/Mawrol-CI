@@ -69,6 +69,38 @@ for i in clkgate_enable hibern8_on_idle_enable; do
 done
 
 if [ "$(cat /sys/module/lpm_levels/parameters/sleep_disabled)" == "Y" ]; then
-  echo N > /sys/module/lpm_levels/parameters/sleep_disabled
-  echo "[INFO]: 已恢复关闭的CPUidle lpm_level"
+  set_val /sys/module/lpm_levels/parameters/sleep_disabled N
+  log "[INFO]: 已恢复关闭的CPUidle lpm_level"
 fi
+
+STUNE_TASK="
+system_server foreground cgroup.procs
+surfaceflinger foreground tasks
+android.io foreground tasks
+android.anim top-app tasks
+android.anim.lf top-app tasks
+android.bg background tasks
+android.fg foreground tasks
+android.ui top-app tasks
+android.display top-app tasks
+ndroid.systemui top-app tasks
+"
+CPUSET_TASK="
+system_server foreground cgroup.procs
+surfaceflinger system-background tasks
+android.io foreground tasks
+android.anim top-app tasks
+android.anim.lf top-app tasks
+android.bg system-background tasks
+android.fg foreground tasks
+android.ui foreground tasks
+android.display top-app tasks
+ndroid.systemui top-app tasks
+"
+for i in $STUNE_TASK; do
+    set_task $i stune
+done
+for i in $CPUSET_TASK; do
+    set_task $i cpuset
+done
+log "[INFO]: 已经设置了Pixel的cgroup设定"
