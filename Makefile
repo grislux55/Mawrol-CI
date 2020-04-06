@@ -438,6 +438,7 @@ endif
 
 # Optimization for sm8150
 # KBUILD_CFLAGS	+= -mcpu=cortex-a76.cortex-a55+crc+crypto -Werror=vla
+KBUILD_CFLAGS += -mcpu=cortex-a55 -mtune=cortex-a55
 
 # This doesn't need 835769/843419 erratum fixes.
 # Some toolchains enable those fixes automatically, so opt-out.
