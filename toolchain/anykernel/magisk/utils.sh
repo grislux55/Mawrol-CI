@@ -9,21 +9,6 @@ detect_os() {
   fi
 }
 
-# set_task $1:task_name $2:cgroup_name $3:target $4:resource_file
-set_task() {
-    # avoid matching grep itself
-    # ps -Ao pid,args | grep kswapd
-    # 150 [kswapd0]
-    # 16490 grep kswapd
-    local ps_ret
-    ps_ret="$(ps -Ao pid,args)"
-    for temp_pid in $(echo "$ps_ret" | grep "$1" | awk '{print $1}'); do
-        for temp_tid in $(ls "/proc/$temp_pid/task/"); do
-            echo "$temp_tid" > "/dev/$4/$2/$3"
-        done
-    done
-}
-
 set_val() {
   echo $2 > $1
 }

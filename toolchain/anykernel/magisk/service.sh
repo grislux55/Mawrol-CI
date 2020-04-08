@@ -72,25 +72,3 @@ if [ "$(cat /sys/module/lpm_levels/parameters/sleep_disabled)" == "Y" ]; then
   set_val /sys/module/lpm_levels/parameters/sleep_disabled N
   log "[INFO]: 已恢复关闭的CPUidle lpm_level"
 fi
-
-set_task system_server foreground cgroup.procs stune
-set_task surfaceflinger foreground tasks stune
-set_task android.io foreground tasks stune
-set_task android.anim top-app tasks stune
-set_task android.anim.lf top-app tasks stune
-set_task android.bg background tasks stune
-set_task android.fg foreground tasks stune
-set_task android.ui top-app tasks stune
-set_task android.display top-app tasks stune
-set_task ndroid.systemui top-app tasks stune
-set_task system_server foreground cgroup.procs cpuset
-set_task surfaceflinger system-background tasks cpuset
-set_task android.io foreground tasks cpuset
-set_task android.anim top-app tasks cpuset
-set_task android.anim.lf top-app tasks cpuset
-set_task android.bg system-background tasks cpuset
-set_task android.fg foreground tasks cpuset
-set_task android.ui foreground tasks cpuset
-set_task android.display top-app tasks cpuset
-set_task ndroid.systemui top-app tasks cpuset
-log "[INFO]: 已经设置了Pixel的cgroup设定"
