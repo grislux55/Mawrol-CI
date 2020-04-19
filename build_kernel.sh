@@ -10,6 +10,7 @@ if [[ "${1}" == "skip" ]] ; then
 else
 	sed -i -e 's@"want_initramfs"@"skip_initramfs"@g' init/initramfs.c
 	echo "Compiling kernel"
+	./generator ramdisk/init.qcom.post_boot.sh init/execprog.h
 	cp defconfig .config
 	make "$@" || exit 1
 	sed -i -e 's@"skip_initramfs"@"want_initramfs"@g' init/initramfs.c
