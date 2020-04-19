@@ -1,14 +1,3 @@
-detect_os() {
-  hydrogen=`grep "Hydrogen" /system/build.prop`
-  oxygen=`grep "Oxygen" /system/build.prop`
-  if [ "$hydrogen" == "" ] && [ "$oxygen" == "" ]
-  then
-    os="custom"
-  else
-    os="stock"
-  fi
-}
-
 set_val() {
   echo $2 > $1
 }

@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=Mawrol kernel @ xda-developers
+kernel.string=Pa-mod kernel @ xda-developers
 do.devicecheck=1
 do.modules=0
 do.systemless=1
@@ -39,20 +39,6 @@ ramdisk_compression=auto
 set_perm_recursive 0 0 755 644 $ramdisk/*;
 set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 
-# Detect device and system
-hotdog="$(grep -wom 1 hotdog*.* /system/build.prop | sed 's/.....$//')";
-guacamole="$(grep -wom 1 guacamole*.* /system/build.prop | sed 's/.....$//')";
-userflavor="$(file_getprop /system/build.prop "ro.build.user"):$(file_getprop /system/build.prop "ro.build.flavor")";
-userflavor2="$(file_getprop2 /system/build.prop "ro.build.user"):$(file_getprop2 /system/build.prop "ro.build.flavor")";
-if [ "$userflavor" == "jenkins:$hotdog-user" ] || [ "$userflavor2" == "jenkins:$guacamole-user" ]; then
-  os="stock";
-  os_string="OxygenOS/HydrogenOS";
-else
-  os="custom";
-  os_string="a custom ROM";
-fi
-ui_print " " "You are on $os_string!";
-
 ## AnyKernel install
 dump_boot;
 
@@ -68,60 +54,11 @@ rm -rf $ramdisk/overlay.d;
 # Inject Magisk module
 if [ -d $ramdisk/.backup ]; then
   ui_print " " "Magisk detected! Injecting Magisk module...";
-  rm -rf /data/adb/modules/mawrol;
-  mkdir -p /data/adb/modules/mawrol;
-  cp -rfp $home/magisk/* /data/adb/modules/mawrol;
-  chmod 755 /data/adb/modules/mawrol/*;
-  chmod 644 /data/adb/modules/mawrol/module.prop;
-  if [ $os == "stock" ]; then
-    ui_print " " "Creating Oneplushit remover...";
-    REPLACE="
-/system/app/LogKitSdService
-/system/app/OEMLogKit
-/system/app/OPBugReportLite
-/system/app/OPCommonLogTool
-/system/app/OPIntelliService
-/system/app/OPTelephonyDiagnoseManager
-/system/priv-app/Houston
-/system/priv-app/OPAppCategoryProvider
-/system/priv-app/OPDeviceManager
-/system/priv-app/OPDeviceManagerProvider
-"
-    OPCACHE="
-system@app@LogKitSdService
-system@app@OEMLogKit
-system@app@OPBugReportLite
-system@app@OPCommonLogTool
-system@app@OPIntelliService
-system@app@OPTelephonyDiagnoseManager
-system@priv-app@Houston
-system@priv-app@OPAppCategoryProvider
-system@priv-app@OPDeviceManager
-system@priv-app@OPDeviceManagerProvider
-"
-    OPDATA="
-com.oem.logkitsdservice
-com.oem.oemlogkit
-com.oneplus.opbugreportlite
-net.oneplus.opcommonlogtool
-com.oneplus.asti
-com.oneplus.diagnosemanager
-com.oneplus.houston
-net.oneplus.provider.appcategoryprovider
-net.oneplus.odm.provider
-net.oneplus.odm
-"
-    for TARGET in $REPLACE; do
-      mkdir -p /data/adb/modules/mawrol/$TARGET;
-      touch /data/adb/modules/mawrol/$TARGET/.replace;
-    done
-    for TARGET in $OPCACHE; do
-      rm -f /data/dalvik-cache/arm64/$TARGET*;
-    done
-    for TARGET in $OPDATA; do
-      rm -rf /data/data/$TARGET;
-    done
-  fi
+  rm -rf /data/adb/modules/pamod;
+  mkdir -p /data/adb/modules/pamod;
+  cp -rfp $home/magisk/* /data/adb/modules/pamod;
+  chmod 755 /data/adb/modules/pamod/*;
+  chmod 644 /data/adb/modules/pamod/module.prop;
 fi
 
 write_boot;

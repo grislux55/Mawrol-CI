@@ -11,23 +11,9 @@ MODDIR=${0%/*}
 chmod 755 $MODDIR/utils.sh
 . $MODDIR/utils.sh
 
-detect_os
-
 while $(dumpsys window policy | grep mIsShowing | awk -F= '{print $2}'); do
 sleep 1
 done
-
-if [ $os == "stock" ]; then
-  resetprop ctl.stop oneplus_brain_service
-  resetprop ctl.stop charger_logkit
-  resetprop ctl.stop oemlogkit
-  resetprop ctl.stop opdiagnose
-  resetprop ctl.stop OPDiagdataCopy
-  resetprop persist.sys.ohpd.flags 0
-  resetprop persist.sys.ohpd.kcheck false
-  resetprop persist.vendor.sys.memplus.enable 0
-  log "[INFO]: 一加垃圾服务已停止"
-fi
 
 set_val /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2323200
 set_val /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2649600

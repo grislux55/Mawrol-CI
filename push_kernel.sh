@@ -10,7 +10,7 @@ git config --global user.email $GITEMAIL
 git clone https://$GITID:$GITPWD@github.com/$GITID/kernel_release
 cd kernel_release
 mkdir -p "q/$commit"
-cp ../Mawrol-*.zip "./q/$commit"
+cp ../arter97-kernel-*.zip "./q/$commit"
 
 git add . && git commit -m "build for $commit" -s
 git push https://$GITID:$GITPWD@github.com/$GITID/kernel_release HEAD:master
