@@ -2,14 +2,17 @@
 
 if [[ "${1}" != "skip" ]] ; then
 	./build_clean.sh
-	./build_kernel.sh stock "$@" || exit 1
 fi
 
-VERSION="$(cat version)-$(date +%F | sed s@-@@g)"
+./build_kernel.sh "$@" || exit 1
 
-if [ -e boot.img ] ; then
-	rm arter97-kernel-$VERSION.zip 2>/dev/null
-	cp boot.img arter97-kernel-$VERSION.img
+VERSION="$(cat version)"
+
+if [ -e arch/arm64/boot/Image.gz ] ; then
+	echo "Packing Kernel Pkg"
+
+	[ -f arter97-kernel-$VERSION.zip ] && echo "Removing Exist Pkg"
+	[ -f arter97-kernel-$VERSION.zip ] && rm arter97-kernel-$VERSION.zip 2>/dev/null
 
 	# Pack AnyKernel3
 	rm -rf kernelzip
