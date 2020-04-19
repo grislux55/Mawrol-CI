@@ -51,6 +51,10 @@
 #include "op_charge.h"
 #include <linux/oneplus/boot_mode.h>
 
+#ifdef CONFIG_FORCE_FAST_CHARGE
+#include <linux/fastchg.h>
+#endif
+
 #define SOC_INVALID                   0x7E
 #define SOC_DATA_REG_0                0x88D
 #define SOC_FLAG_REG                  0x88E
@@ -1474,6 +1478,13 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 	u8 icl_options;
 	const struct apsd_result *apsd_result = smblib_get_apsd_result(chg);
 
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	if (force_fast_charge > 0 && icl_ua == USBIN_500MA)
+	{
+		icl_ua = USBIN_900MA;
+	}
+#endif
+
 	/* power source is SDP */
 	switch (icl_ua) {
 	case USBIN_100MA:
@@ -1881,7 +1892,7 @@ static int smblib_awake_vote_callback(struct votable *votable, void *data,
 /* @bsp, 2019/04/17 Battery & Charging porting */
 	pr_info("set awake=%d\n", awake);
 	if (awake)
-		pm_stay_awake(chg->dev);
+		pm_wakeup_event(chg->dev, 500);
 	else
 		pm_relax(chg->dev);
 
@@ -7533,8 +7544,14 @@ static void op_handle_usb_removal(struct smb_charger *chg)
 	chg->recovery_boost_count = 0;
 	chg->ck_unplug_count = 0;
 	chg->count_run = 0;
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	chg->ffc_count = 0;
+#endif
 	vote(chg->fcc_votable,
 		DEFAULT_VOTER, true, SDP_CURRENT_UA);
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	set_sdp_current(chg, USBIN_500MA);
+#endif
 	op_battery_temp_region_set(chg, BATT_TEMP_INVALID);
 }
 
@@ -7656,7 +7673,7 @@ static int op_set_collapse_fet(struct smb_charger *chg, bool on)
 	return rc;
 }
 
-pm_schg_dcdc_configure_vsysmin(struct smb_charger *chg, int val)
+int pm_schg_dcdc_configure_vsysmin(struct smb_charger *chg, int val)
 {
 
 	int vsys_min_mask = 0x07; // BIT<2:0>
@@ -9439,7 +9456,7 @@ static int op_get_skin_thermal_temp(struct smb_charger *chg)
 	else if (chg->skin_thermal_temp <= chg->skin_thermal_normal_threshold)
 		chg->is_skin_thermal_high = false;
 
-	pr_info("skin_thermal_temp=(%d), is_skin_thermal_high(%d)\n",
+	pr_debug("skin_thermal_temp=(%d), is_skin_thermal_high(%d)\n",
 			chg->skin_thermal_temp,
 			chg->is_skin_thermal_high);
 
@@ -9470,11 +9487,11 @@ bool check_call_on_status(void)
 	is_call_on = *g_chg->call_on;
 
 	if (is_call_on == 1) {
-		pr_info("is_call_on=(%d)\n",
+		pr_debug("is_call_on=(%d)\n",
 				is_call_on);
 		return true;
 	} else {
-		pr_info("is_call_on=(%d)\n",
+		pr_debug("is_call_on=(%d)\n",
 				is_call_on);
 		return false;
 	}
@@ -9642,7 +9659,7 @@ static void op_heartbeat_work(struct work_struct *work)
 	chg->dash_on = get_prop_fast_chg_started(chg);
 	if (chg->dash_on) {
 		switch_fast_chg(chg);
-		pr_info("fast chg started, usb_switch=%d\n",
+		pr_debug("fast chg started, usb_switch=%d\n",
 				op_is_usb_switch_on(chg));
 		/* add for disable normal charge */
 		fast_charging = op_get_fastchg_ing(chg);

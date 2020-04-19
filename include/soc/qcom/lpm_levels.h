@@ -22,6 +22,7 @@ struct system_pm_ops {
 
 #ifdef CONFIG_MSM_PM
 uint32_t register_system_pm_ops(struct system_pm_ops *pm_ops);
+void lpm_cluster_use_deepest_state(bool enable);
 void update_ipi_history(int cpu);
 #else
 static inline uint32_t register_system_pm_ops(struct system_pm_ops *pm_ops)

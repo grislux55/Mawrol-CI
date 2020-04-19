@@ -630,7 +630,7 @@ static int avc_latest_notif_update(int seqno, int is_insert)
 	spin_lock_irqsave(&notif_lock, flag);
 	if (is_insert) {
 		if (seqno < avc_cache.latest_notif) {
-			printk(KERN_WARNING "SELinux: avc:  seqno %d < latest_notif %d\n",
+			pr_debug(KERN_WARNING "SELinux: avc:  seqno %d < latest_notif %d\n",
 			       seqno, avc_cache.latest_notif);
 			ret = -EAGAIN;
 		}
@@ -748,6 +748,10 @@ noinline int slow_avc_audit(u32 ssid, u32 tsid, u16 tclass,
 {
 	struct common_audit_data stack_data;
 	struct selinux_audit_data sad;
+
+	/* Only log permissive=1 messages for SECURITY_SELINUX_DEVELOP */
+	if (denied && !result)
+		return 0;
 
 	if (!a) {
 		a = &stack_data;

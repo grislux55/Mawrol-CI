@@ -756,7 +756,7 @@ out:
 		get_current_time(&di->soc_pre_time);
 		/* store when soc changed */
 		power_supply_changed(di->batt_psy);
-		pr_info("soc:%d, soc_calib:%d, VOLT:%d, current:%d\n",
+		pr_debug("soc:%d, soc_calib:%d, VOLT:%d, current:%d\n",
 		soc, soc_calib, bq27541_battery_voltage(di) / 1000,
 		bq27541_average_current(di) / 1000);
 	}
@@ -794,7 +794,7 @@ struct bq27541_device_info *di, int suspend_time_ms)
 			goto read_soc_err;
 		}
 		if (soc_pre != soc)
-			pr_err("bq27541_battery_soc = %d\n", soc);
+			pr_debug("bq27541_battery_soc = %d\n", soc);
 
 		soc_pre = soc;
 	} else {
@@ -1276,8 +1276,13 @@ static bool check_bat_present(struct bq27541_device_info *di)
 	ret = bq27541_read(BQ27541_SUBCMD_CHEM_ID, &flags, 0, di);
 	if (ret < 0) {
 		pr_err("read bq27541  fail\n");
-		di->bq_present = false;
-		return false;
+		mdelay(100);
+		ret = bq27541_read(BQ27541_SUBCMD_CHEM_ID, &flags, 0, di);
+		if (ret < 0) {
+			pr_err("read bq27541  fail again\n");
+			di->bq_present = false;
+			return false;
+		}
 	}
 	di->bq_present = true;
 	return true;

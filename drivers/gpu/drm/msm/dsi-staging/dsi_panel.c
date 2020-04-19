@@ -38,6 +38,11 @@
 #include "sde_hw_mdss.h"
 #include "sde_rm.h"
 #include "sde_trace.h"
+
+#ifdef CONFIG_KLAPSE
+#include <linux/klapse.h>
+#endif
+
 /**
  * topology is currently defined by a set of following 3 values:
  * 1. num of layer mixers
@@ -912,6 +917,10 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 		pr_err("HBM is enabled\n");
 		return 0;
 	}
+	
+#ifdef CONFIG_KLAPSE
+	set_rgb_slider(bl_lvl);
+#endif
 
 	/*** DC backlight config ****/
 	if (op_dimlayer_bl_enabled != op_dimlayer_bl_enable_real) {
@@ -948,7 +957,7 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 		}
 
 		rc = mipi_dsi_dcs_set_display_brightness_samsung(dsi, bl_lvl);
-		pr_err("backlight = %d\n", bl_lvl);
+		pr_debug("backlight = %d\n", bl_lvl);
 		cur_backlight = bl_lvl;
 		cur_fps = mode_fps;
 		cur_h = panel->cur_mode->timing.h_active;
