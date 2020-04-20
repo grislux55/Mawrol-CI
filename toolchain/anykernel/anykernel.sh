@@ -43,8 +43,8 @@ set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 dump_boot;
 
 # Override DTB
-ui_print " " "Overriding DTB...";
-mv $home/dtb $home/split_img/
+# ui_print " " "Overriding DTB...";
+# mv $home/dtb $home/split_img/
 
 # Clean up existing ramdisk overlays
 ui_print " " "Cleaning up existing ramdisk overlays...";

@@ -20,10 +20,10 @@ if [ -e arch/arm64/boot/Image.gz ] ; then
 	rm -rf kernelzip
 	mkdir kernelzip
 	cp -rp $ANYKERNEL_PATH/* kernelzip/
-	find arch/arm64/boot/dts -name '*.dtb' -exec cat {} + > kernelzip/dtb
+	# find arch/arm64/boot/dts -name '*.dtb' -exec cat {} + > kernelzip/dtb
 	cd kernelzip/
 	7z a -mx9 arter97-kernel-$VERSION-tmp.zip *
-	7z a -mx0 arter97-kernel-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz
+	7z a -mx0 arter97-kernel-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz-dtb
 	zipalign -v 4 arter97-kernel-$VERSION-tmp.zip ../arter97-kernel-$VERSION.zip
 	rm arter97-kernel-$VERSION-tmp.zip
 	cd ..
