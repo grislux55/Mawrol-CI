@@ -42,24 +42,10 @@ set_perm_recursive 0 0 750 750 $ramdisk/init* $ramdisk/sbin;
 ## AnyKernel install
 dump_boot;
 
-# Override DTB
-# ui_print " " "Overriding DTB...";
-# mv $home/dtb $home/split_img/
-
 # Clean up existing ramdisk overlays
 ui_print " " "Cleaning up existing ramdisk overlays...";
 rm -rf $ramdisk/overlay;
 rm -rf $ramdisk/overlay.d;
-
-# Inject Magisk module
-if [ -d $ramdisk/.backup ]; then
-  ui_print " " "Magisk detected! Injecting Magisk module...";
-  rm -rf /data/adb/modules/pamod;
-  mkdir -p /data/adb/modules/pamod;
-  cp -rfp $home/magisk/* /data/adb/modules/pamod;
-  chmod 755 /data/adb/modules/pamod/*;
-  chmod 644 /data/adb/modules/pamod/module.prop;
-fi
 
 write_boot;
 ## end install
