@@ -7,7 +7,7 @@ commit="$(cat version)-$(cut -c-12 <<< "$(git rev-parse HEAD)")"
 git config --global user.name $GITNAME
 git config --global user.email $GITEMAIL
 
-git clone https://$GITID:$GITPWD@github.com/$GITID/kernel_release
+git clone --depth=1 https://$GITID:$GITPWD@github.com/$GITID/kernel_release
 cd kernel_release
 mkdir -p "q/$commit"
 cp ../arter97-kernel-*.zip "./q/$commit"
