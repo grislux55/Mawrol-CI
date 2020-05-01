@@ -218,7 +218,7 @@ rm /dev/resetprop
 echo 2000 > /dev/blkio/blkio.group_idle
 echo 0 > /dev/blkio/background/blkio.group_idle
 echo 1000 > /dev/blkio/blkio.weight
-echo 10 > /dev/blkio/background/blkio.weight
+echo 200 > /dev/blkio/background/blkio.weight
 
 # stune
 echo 0 > /dev/stune/schedtune.prefer_idle
