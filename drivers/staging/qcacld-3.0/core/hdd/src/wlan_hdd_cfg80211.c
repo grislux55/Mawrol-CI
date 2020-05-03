@@ -21686,12 +21686,14 @@ wlan_hdd_cfg80211_indicate_disconnect(struct hdd_adapter *adapter,
 
 	ieee80211_reason = wlan_hdd_get_cfg80211_disconnect_reason(adapter,
 								   reason);
+#ifdef WLAN_DEBUG
 	hdd_nofl_info("Disconnect reason: %u %s vendor: %u %s LG: %u",
 		      ieee80211_reason,
 		      hdd_ieee80211_reason_code_to_str(ieee80211_reason),
 		      adapter->last_disconnect_reason,
 		      hdd_qca_reason_to_str(adapter->last_disconnect_reason),
 		      locally_generated);
+#endif
 	cfg80211_disconnected(adapter->dev, ieee80211_reason, disconnect_ies,
 			      disconnect_ies_len, locally_generated,
 			      GFP_KERNEL);
@@ -21708,12 +21710,14 @@ wlan_hdd_cfg80211_indicate_disconnect(struct hdd_adapter *adapter,
 
 	ieee80211_reason = wlan_hdd_get_cfg80211_disconnect_reason(adapter,
 								   reason);
+#ifdef WLAN_DEBUG
 	hdd_nofl_info("Disconnect reason: %u %s vendor: %u %s LG: %u",
 		      ieee80211_reason,
 		      hdd_ieee80211_reason_code_to_str(ieee80211_reason),
 		      adapter->last_disconnect_reason,
 		      hdd_qca_reason_to_str(adapter->last_disconnect_reason),
 		      locally_generated);
+#endif
 	cfg80211_disconnected(adapter->dev, ieee80211_reason, disconnect_ies,
 			      disconnect_ies_len, GFP_KERNEL);
 }
@@ -21745,73 +21749,6 @@ int wlan_hdd_disconnect(struct hdd_adapter *adapter, u16 reason,
 #endif
 
 	return ret;
-}
-
-/**
- * hdd_ieee80211_reason_code_to_str() - return string conversion of reason code
- * @reason: ieee80211 reason code.
- *
- * This utility function helps log string conversion of reason code.
- *
- * Return: string conversion of reason code, if match found;
- *         "Unknown" otherwise.
- */
-static const char *hdd_ieee80211_reason_code_to_str(uint16_t reason)
-{
-#ifdef WLAN_DEBUG
-	switch (reason) {
-	CASE_RETURN_STRING(WLAN_REASON_UNSPECIFIED);
-	CASE_RETURN_STRING(WLAN_REASON_PREV_AUTH_NOT_VALID);
-	CASE_RETURN_STRING(WLAN_REASON_DEAUTH_LEAVING);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_DUE_TO_INACTIVITY);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_AP_BUSY);
-	CASE_RETURN_STRING(WLAN_REASON_CLASS2_FRAME_FROM_NONAUTH_STA);
-	CASE_RETURN_STRING(WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_STA_HAS_LEFT);
-	CASE_RETURN_STRING(WLAN_REASON_STA_REQ_ASSOC_WITHOUT_AUTH);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_BAD_POWER);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_BAD_SUPP_CHAN);
-	CASE_RETURN_STRING(WLAN_REASON_INVALID_IE);
-	CASE_RETURN_STRING(WLAN_REASON_MIC_FAILURE);
-	CASE_RETURN_STRING(WLAN_REASON_4WAY_HANDSHAKE_TIMEOUT);
-	CASE_RETURN_STRING(WLAN_REASON_GROUP_KEY_HANDSHAKE_TIMEOUT);
-	CASE_RETURN_STRING(WLAN_REASON_IE_DIFFERENT);
-	CASE_RETURN_STRING(WLAN_REASON_INVALID_GROUP_CIPHER);
-	CASE_RETURN_STRING(WLAN_REASON_INVALID_PAIRWISE_CIPHER);
-	CASE_RETURN_STRING(WLAN_REASON_INVALID_AKMP);
-	CASE_RETURN_STRING(WLAN_REASON_UNSUPP_RSN_VERSION);
-	CASE_RETURN_STRING(WLAN_REASON_INVALID_RSN_IE_CAP);
-	CASE_RETURN_STRING(WLAN_REASON_IEEE8021X_FAILED);
-	CASE_RETURN_STRING(WLAN_REASON_CIPHER_SUITE_REJECTED);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_UNSPECIFIED_QOS);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_QAP_NO_BANDWIDTH);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_LOW_ACK);
-	CASE_RETURN_STRING(WLAN_REASON_DISASSOC_QAP_EXCEED_TXOP);
-	CASE_RETURN_STRING(WLAN_REASON_QSTA_LEAVE_QBSS);
-	CASE_RETURN_STRING(WLAN_REASON_QSTA_NOT_USE);
-	CASE_RETURN_STRING(WLAN_REASON_QSTA_REQUIRE_SETUP);
-	CASE_RETURN_STRING(WLAN_REASON_QSTA_TIMEOUT);
-	CASE_RETURN_STRING(WLAN_REASON_QSTA_CIPHER_NOT_SUPP);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_PEER_CANCELED);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_MAX_PEERS);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_CONFIG);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_CLOSE);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_MAX_RETRIES);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_CONFIRM_TIMEOUT);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_INVALID_GTK);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_INCONSISTENT_PARAM);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_INVALID_SECURITY);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_PATH_ERROR);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_PATH_NOFORWARD);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_PATH_DEST_UNREACHABLE);
-	CASE_RETURN_STRING(WLAN_REASON_MAC_EXISTS_IN_MBSS);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_CHAN_REGULATORY);
-	CASE_RETURN_STRING(WLAN_REASON_MESH_CHAN);
-	default:
-		return "Unknown";
-	}
-#endif
-	return "";
 }
 
 /**
@@ -21938,9 +21875,11 @@ static int __wlan_hdd_cfg80211_disconnect(struct wiphy *wiphy,
 		if (vdev)
 			hdd_objmgr_put_vdev(vdev);
 
+#ifdef WLAN_DEBUG
 		hdd_nofl_info("%s(vdevid-%d): Received Disconnect reason:%d %s",
 			      dev->name, adapter->session_id, reason,
 			      hdd_ieee80211_reason_code_to_str(reason));
+#endif
 		status = wlan_hdd_disconnect(adapter, reasonCode, reason);
 		if (0 != status) {
 			hdd_err("wlan_hdd_disconnect failed, status: %d", status);
