@@ -731,7 +731,6 @@ void pm_qos_add_request(struct pm_qos_request *req,
 	case PM_QOS_REQ_AFFINE_CORES:
 		if (!atomic_cmpxchg_relaxed(&req->cpus_affine, 0, CPUMASK_ALL)) {
 			req->type = PM_QOS_REQ_ALL_CORES;
-			atomic_set(&req->cpus_affine, CPUMASK_ALL);
 			WARN(1, "Affine cores not set for request with affinity flag\n");
 		}
 		break;
