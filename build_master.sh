@@ -13,8 +13,8 @@ VERSION="$(cat version)"
 if [ -e arch/arm64/boot/Image.gz ] ; then
 	echo "Packing Kernel Pkg"
 
-	[ -f arter97-kernel-$VERSION.zip ] && echo "Removing Exist Pkg"
-	[ -f arter97-kernel-$VERSION.zip ] && rm arter97-kernel-$VERSION.zip 2>/dev/null
+	[ -f arter97-pa-mod-$VERSION.zip ] && echo "Removing Exist Pkg"
+	[ -f arter97-pa-mod-$VERSION.zip ] && rm arter97-pa-mod-$VERSION.zip 2>/dev/null
 
 	# Pack AnyKernel3
 	rm -rf kernelzip
@@ -22,10 +22,10 @@ if [ -e arch/arm64/boot/Image.gz ] ; then
 	cp -rp $ANYKERNEL_PATH/* kernelzip/
 	# find arch/arm64/boot/dts -name '*.dtb' -exec cat {} + > kernelzip/dtb
 	cd kernelzip/
-	7z a -mx9 arter97-kernel-$VERSION-tmp.zip *
-	7z a -mx0 arter97-kernel-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz-dtb
-	zipalign -v 4 arter97-kernel-$VERSION-tmp.zip ../arter97-kernel-$VERSION.zip
-	rm arter97-kernel-$VERSION-tmp.zip
+	7z a -mx9 arter97-pa-mod-$VERSION-tmp.zip *
+	7z a -mx0 arter97-pa-mod-$VERSION-tmp.zip ../arch/arm64/boot/Image.gz-dtb
+	zipalign -v 4 arter97-pa-mod-$VERSION-tmp.zip ../arter97-pa-mod-$VERSION.zip
+	rm arter97-pa-mod-$VERSION-tmp.zip
 	cd ..
-	ls -al arter97-kernel-$VERSION.zip
+	ls -al arter97-pa-mod-$VERSION.zip
 fi

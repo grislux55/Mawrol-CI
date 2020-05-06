@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=Pa-mod kernel @ xda-developers
+kernel.string=Arter97 pa-mod kernel @ xda-developers
 do.devicecheck=1
 do.modules=0
 do.systemless=1
