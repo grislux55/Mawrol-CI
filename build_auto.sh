@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git clone https://github.com/kdrag0n/proton-clang ./toolchain/proton-clang --depth=1
+
 jobs="-j$(nproc --all)"
 
 cp -fp ./toolchain/misc/dtc /usr/bin
