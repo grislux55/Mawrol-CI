@@ -1,13 +1,19 @@
 #!/bin/bash
 export KERNELDIR=`readlink -f .`
-export GCC64_PATH=./toolchain/proton-clang/bin/aarch64-linux-gnu-
-export GCC32_PATH=./toolchain/proton-clang/bin/arm-linux-gnueabi-
-export CLANG_PATH=./toolchain/proton-clang/bin/
+
+if [[ "${1}" == "ci" ]] ; then
+	export CLANG_PATH=./toolchain/proton-clang/bin
+else
+	export CLANG_PATH=~/kernel/clang/proton-clang/bin
+fi
+
+export ARCH=arm64
+export SUBARCH=arm64
+export CROSS_COMPILE=$CLANG_PATH/aarch64-linux-gnu-
+export CROSS_COMPILE_ARM32=$CLANG_PATH/arm-linux-gnueabi-
 export PATH=${CLANG_PATH}:${PATH}
 export CLANG_TRIPLE=aarch64-linux-gnu-
-export CROSS_COMPILE=./toolchain/proton-clang/bin/aarch64-linux-gnu-
-export CROSS_COMPILE_ARM32=./toolchain/proton-clang/bin/arm-linux-gnueabi-
-export LD_LIBRARY_PATH=./toolchain/proton-clang/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$CLANG_PATH/../lib:$LD_LIBRARY_PATH
 
 echo "kerneldir = $KERNELDIR"
 
