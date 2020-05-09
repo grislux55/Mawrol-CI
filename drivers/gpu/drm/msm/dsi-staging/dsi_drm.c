@@ -326,7 +326,6 @@ static bool dsi_bridge_mode_fixup(struct drm_bridge *bridge,
 	struct drm_display_mode cur_mode;
 	struct drm_crtc_state *crtc_state;
 	bool clone_mode = false;
-	struct drm_encoder *encoder;
 
 	crtc_state = container_of(mode, struct drm_crtc_state, mode);
 

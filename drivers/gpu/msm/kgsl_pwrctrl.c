@@ -2663,7 +2663,6 @@ static int _wake(struct kgsl_device *device)
 {
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
 	int status = 0;
-	unsigned int state = device->state;
 
 	switch (device->state) {
 	case KGSL_STATE_SUSPEND:

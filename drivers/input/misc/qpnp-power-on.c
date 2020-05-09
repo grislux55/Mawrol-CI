@@ -1149,7 +1149,6 @@ static void bark_work_func(struct work_struct *work)
 
 int check_powerkey_count(int press)
 {
-    int ret=0;
     static int param_poweroff_count=0;
 
     if(press)
