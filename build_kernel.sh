@@ -1,7 +1,7 @@
 #!/bin/bash
 export KERNELDIR=`readlink -f .`
-export GCC64_PATH=./toolchain/aarch64-elf-gcc/bin/aarch64-elf-
-export GCC32_PATH=./toolchain/arm-eabi-gcc/bin/arm-eabi-
+export GCC64_PATH=./toolchain/aarch64-linux-elf/bin/aarch64-linux-elf-
+export GCC32_PATH=./toolchain/arm-linux-eabi/bin/arm-linux-eabi-
 
 echo "kerneldir = $KERNELDIR"
 
