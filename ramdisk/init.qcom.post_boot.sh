@@ -9,6 +9,10 @@ if [ ! -f /sbin/recovery ] && [ ! -f /dev/.post_boot ]; then
   # Setup readahead
   find /sys/devices -name read_ahead_kb | while read node; do echo 2048 > $node; done
 
+  # Stune speed up
+  echo 1 > /dev/stune/schedtune.prefer_idle
+  echo 100 > /dev/stune/schedtune.boost
+
   # Setup binaries
   RESETPROPSIZE=47297
   MKSWAPSIZE=$((6081+$RESETPROPSIZE))
